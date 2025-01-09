@@ -5,7 +5,9 @@ The R script has been modified to increase scalability by enabling automated pro
 
 The script has also been modified to allow automated renaming of output files in a specific format. This process assumes that the input files follow the following naming format: PMIDs_PRAttitudesofAIC_XXXX-XXXX_MMMDDYYXY where XY = initials. This section is not strictly necessary for the code to function and can be replaced with a different function to simply rename the file as an output of the target file. 
                     
-  To do so, replace:   # Extract the base name of the input file, removing "PMIDs_" and any suffix with a date/initials
+  To do so, replace:   
+  
+                       # Extract the base name of the input file, removing "PMIDs_" and any suffix with a date/initials
                        base_name <- sub("^PMIDs_", "", file_base_name)
                        base_name <- sub("_Nov.*", "", base_name)
      
@@ -21,7 +23,9 @@ The script has also been modified to allow automated renaming of output files in
                        write_csv(dfoutput, output_file)
                        print(paste("Saved output to:", output_file))
 
-With:                  # Generate a default output file name using the input file base name
+With:                 
+                
+                       # Generate a default output file name using the input file base name
                        output_file <- file.path(output_path, paste0(file_base_name, "_output.csv"))
      
                        # Save the output DataFrame to a CSV file
