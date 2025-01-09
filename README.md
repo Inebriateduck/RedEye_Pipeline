@@ -1,5 +1,5 @@
 # Automated-Contact-scraping
-## This is still actively under development - currently working on adding parralel processing.
+### This is still actively under development - currently working on adding parralel processing.
 This is a heavily modified version of a contact information mining script coded by Phi-Yen Nguyen.
 The R script has been modified to increase scalability by enabling automated processing of CSV files within a single folder as opposed to manuall processing files one by one. The R.Utils library has also been added to prevent the script from hanging when it encounters a faulty PMID, alongside redundant checks to ensure that there are articles and data contained within the target file / PMID. 
 
