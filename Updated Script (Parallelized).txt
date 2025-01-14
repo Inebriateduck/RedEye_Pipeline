@@ -1,0 +1,97 @@
+# Install and load required packages
+install.packages("easyPubMed")
+install.packages("readr")
+install.packages("parallel")
+library(easyPubMed)
+library(readr)
+library(parallel)
+
+# Path setup (Put the path where your PMID's are located - Make sure to use \\)
+path <- 'C:\\'\\'\\'\\'\\'\\'
+output_folder <- paste0(path, "Output\\")
+
+# Create the output folder if it doesn't exist (Leave this as is as it will download the output files here)
+if (!dir.exists(output_folder)) {
+  dir.create(output_folder)
+}
+
+# List of input files (Change to include which files you want extracted)
+input_files <- c(
+"PMIDs_PRAttitudesofAIC_72001-72200_Nov2324ND.csv",
+"PMIDs_PRAttitudesofAIC_72201-72400_Nov2324ND.csv",
+"PMIDs_PRAttitudesofAIC_72401-72600_Nov2324ND.csv",
+"PMIDs_PRAttitudesofAIC_72601-72800_Nov2324ND.csv",
+"PMIDs_PRAttitudesofAIC_72801-73000_Nov2324ND.csv",
+"PMIDs_PRAttitudesofAIC_73001-73200_Nov2324ND.csv",
+"PMIDs_PRAttitudesofAIC_73201-73400_Nov2324ND.csv",
+"PMIDs_PRAttitudesofAIC_73401-73600_Nov2324ND.csv",
+"PMIDs_PRAttitudesofAIC_73601-73800_Nov2324ND.csv",
+"PMIDs_PRAttitudesofAIC_73801-74000_Nov2324ND.csv"
+)
+
+# Function to process a single file
+process_file <- function(file_name) {
+  # Read the current file
+  df <- read_csv(paste0(path, file_name))
+  print(paste("Processing file:", file_name))
+  
+  # Extract the file range from the file name
+  file_range <- gsub("PMIDs_PRAttitudesofAIC_|_Nov2324ND.csv", "", file_name)
+  
+  # Initialize an empty output data frame
+  dfoutput <- data.frame(
+    pmid = character(), doi = character(), title = character(), abstract = character(),
+    year = character(), month = character(), day = character(), jabbrv = character(),
+    journal = character(), keywords = character(), lastname = character(),
+    firstname = character(), affiliation = character(), email = character()
+  )
+  
+  # Process each PMID
+  for (i in 1:nrow(df)) {
+    pmid <- df[[i, 1]]
+    myquery <- paste(pmid, "[PMID]", sep = "")
+    print(paste("Processing PMID:", pmid))
+    
+    pubmedID <- get_pubmed_ids(myquery)
+    abstractXML <- fetch_pubmed_data(pubmedID)
+    abstractlist <- articles_to_list(abstractXML)
+    
+    if (length(abstractlist) != 0) {
+      dftemp <- article_to_df(pubmedArticle = abstractlist[[1]], autofill = TRUE, max_chars = 10)
+      dfoutput <- rbind(dfoutput, dftemp)
+    } else {
+      print("Returns empty list")
+    }
+  }
+  
+  # Get the current date components
+  current_month <- format(Sys.Date(), "%b")
+  current_day <- format(Sys.Date(), "%d")
+  current_year <- format(Sys.Date(), "%y")
+  
+  # Define initials (Put your initials with "")
+  initials <- ""
+  
+  # Create the output file name
+  output_name <- paste0(
+    output_folder, "PMID_Output_PRAttitudesofAIC_", file_range, "_",
+    current_month, current_day, current_year, initials, ".csv"
+  )
+  
+  # Save the output
+  write_csv(dfoutput, output_name)
+  print(paste("Saved output to:", output_name))
+}
+
+# Run the processing in parallel
+num_cores <- detectCores() - 1  # Use one less than the available cores
+cl <- makeCluster(num_cores)
+clusterExport(cl, list("path", "output_folder", "process_file", "input_files"))
+clusterEvalQ(cl, {
+  library(easyPubMed)
+  library(readr)
+})
+parLapply(cl, input_files, process_file)
+stopCluster(cl)
+
+print("Processing completed for all files.")
