@@ -6,7 +6,7 @@ Post extraction renaming assumes that the input files follow the following namin
                     
   To do so, replace:   
   
-                       # Extract the base name of the input file, removing "PMIDs_" and any suffix with a date/initials
+                       # Remove "PMIDs_" and date/initials suffix from the base file name
                        base_name <- sub("^PMIDs_", "", file_base_name)
                        base_name <- sub("_Nov.*", "", base_name)
      
