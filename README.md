@@ -1,9 +1,8 @@
 # Automated-Contact-scraping
-### This is still actively under development - currently working on adding parralel processing.
-This is a heavily modified version of a contact information mining script coded by Phi-Yen Nguyen.
-The R script has been modified to increase scalability by enabling automated processing of all CSV files within a single folder as opposed processing files in a discontinuous manner. The R.Utils library has also been added to prevent the script from hanging when it encounters a faulty PMID, alongside redundant checks to ensure that there are articles and data contained within the target file / PMID. 
+### This is still actively under development - currently working on merging Scraper and Hex-breaker into a unified pipeline.
+**Scraper** is R script is designed to mine target PMIDs for data. It is designed to be easily scalable with the capabilities of the users hardware - the more CPU cores you have, the faster you'll be able to mine your target information from a list of PMIDs. It incorporates R.Utils as well as 2 other redundant failsafes in case the program runs into a issue when processing a target PMID, as well as post-extraction renaming to allow automation.  
 
-The script has also been modified to allow automated renaming of output files in a specific format. This process assumes that the input files follow the following naming format: PMIDs_PRAttitudesofAIC_XXXX-XXXX_MMMDDYYXY where XY = initials. This section is not strictly necessary for the code to function and can be replaced with a different function to simply rename the file as an output of the target file. 
+Post extraction renaming assumes that the input files follow the following naming format: PMIDs_PRAttitudesofAIC_XXXX-XXXX_MMMDDYYXY where XY = initials. This section is not strictly necessary for the code to function and can be replaced with a different function to simply rename the file as an output of the target file. 
                     
   To do so, replace:   
   
@@ -18,16 +17,11 @@ The script has also been modified to allow automated renaming of output files in
                        output_file <- file.path(output_path, paste0(
                        "PMID_Output_", base_name, "_", current_date, first_initial, last_initial, ".csv"
                        ))
-     
-                       # Save the output DataFrame to a CSV file
-                       write_csv(dfoutput, output_file)
-                       print(paste("Saved output to:", output_file))
+
 
 With:                 
                 
                        # Generate a default output file name using the input file base name
                        output_file <- file.path(output_path, paste0(file_base_name, "_output.csv"))
-     
-                       # Save the output DataFrame to a CSV file
-                       write_csv(dfoutput, output_file)
-                       print(paste("Saved output to:", output_file))
+    
+**Hex-Breaker** is a python script that allows cleanup and merging of the output files from **Scraper**. **Hex-Breaker** works by iterating through each file in a target folder and scanning for hex code outputs that often replace special characters, then translates them into their corresponding character and highlights the corrected cell. Finally, the program merges the individual CSV output files from **Scraper** into a single file.
