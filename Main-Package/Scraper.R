@@ -5,14 +5,14 @@
 # install.packages("future.apply")
 # install.packages("data.table")
 
-library(R.utils)      # Contains timeout handling function
-library(easyPubMed)   # Accesses PubMed data
-library(readr)        # Reads + writes CSV files
-library(future.apply) # Optimized parallel processing
-library(data.table)   # For fast data handling
+library(R.utils)      
+library(easyPubMed)   
+library(readr)        
+library(future.apply) 
+library(data.table)   
 library(parallel)
 
-# Define input and output directories
+
 input_path <- '[input path here]'  # Directory containing input CSV files
 output_path <- '[output path here]'  # Directory to save output files
 
@@ -20,15 +20,14 @@ if (!dir.exists(output_path)) {
   dir.create(output_path)
 }
 
-# Get list of input CSV files from the input directory
 input_files <- list.files(input_path, pattern = "\\.csv$", full.names = TRUE)
 
-# PMID timeout processing to prevent hang-crash issues with faulty PMIDs
+# PMID timeout processing
 process_pmids_batch <- function(pmids) {
   print(paste("Processing batch of PMIDs:", paste(pmids, collapse = ", ")))  # Debugging line
   myquery <- paste(paste(pmids, '[PMID]', sep = ""), collapse = " OR ")
 
-  # Fetch PubMed data for multiple PMIDs at once
+  # Fetch PubMed data for PMIDs
   pubmedID <- tryCatch({
     withTimeout({
       get_pubmed_ids(myquery)  # Fetch PubMed IDs
@@ -43,7 +42,7 @@ process_pmids_batch <- function(pmids) {
     return(NULL)  # Skip if fetching PubMed IDs fails
   }
 
-  # Fetch abstracts for all PubMed IDs in the batch
+  # Fetch abstracts
   abstractXML <- fetch_pubmed_data(pubmedID)
   if (is.null(abstractXML) || length(abstractXML) == 0) {
     print(paste("No abstract data for PubMed IDs:", paste(pmids, collapse = ", ")))  # Debugging line
@@ -57,7 +56,6 @@ process_pmids_batch <- function(pmids) {
     return(NULL)  # Skip if no articles are found
   }
 
-  # Convert each article to a DataFrame
   df_list <- lapply(abstractlist, function(article) {
     article_to_df(pubmedArticle = article, autofill = TRUE, max_chars = 10)
   })
@@ -67,12 +65,11 @@ process_pmids_batch <- function(pmids) {
 
 # Process each input file
 for (input_file in input_files) {
-  file_base_name <- tools::file_path_sans_ext(basename(input_file))  # Get the base name of the file
-  df <- read_csv(input_file, col_names = FALSE)  # Read the input CSV file without headers
+  file_base_name <- tools::file_path_sans_ext(basename(input_file))  
+  df <- read_csv(input_file, col_names = FALSE)  
 
   print(paste("Processing file:", input_file))
 
-  # Initialize the output DataFrame
   dfoutput <- data.table(
     pmid = character(), doi = character(), title = character(),
     abstract = character(), year = character(), month = character(),
@@ -82,17 +79,17 @@ for (input_file in input_files) {
     stringsAsFactors = FALSE
   )
 
-  # Extract PMIDs from the CSV
-  pmids <- df[[1]]  # Assuming PMIDs are in the first column
+ 
+  pmids <- df[[1]]  # Assumes PMIDs are in the first column
 
   # Parallel processing using future_lapply for batch processing
   plan(multisession, workers = detectCores() - 1)  # Adjust based on your system
 
-  # Split the PMIDs into batches for faster processing
+  # Splits the PMIDs into batches for faster processing
   batch_size <- 100  # Process 100 PMIDs at a time
   pmid_batches <- split(pmids, ceiling(seq_along(pmids) / batch_size))
 
-  # Process all batches in parallel
+  # Processes all batches in parallel
   results <- future_lapply(pmid_batches, function(batch_pmids) {
     tryCatch({
       process_pmids_batch(batch_pmids)
@@ -100,9 +97,8 @@ for (input_file in input_files) {
       message("Error processing batch of PMIDs: ", e$message)
       return(NULL)
     })
-  }, future.seed = TRUE)  # Ensures randomness is consistent across workers
+  }, future.seed = TRUE) 
 
-  # Combine results and filter out NULLs
   valid_results <- unlist(results, recursive = FALSE)
   valid_results <- valid_results[!sapply(valid_results, is.null)]
 
@@ -111,11 +107,10 @@ for (input_file in input_files) {
     dfoutput <- rbindlist(valid_results, fill = TRUE)
   }
 
-  # Remove "PMIDs_" and date/initials suffix from the base file name
+  # Remove "PMIDs_" and date/initials suffix from the base file name and generates new file name
   base_name <- sub("^PMIDs_", "", file_base_name)
   base_name <- sub("_Nov.*", "", base_name)
 
-  # Generate the new output file name
   current_date <- format(Sys.Date(), "%b%d%y")  # Get current date in MMMDDYY format
   first_initial <- 'X'  # Replace with your first initial
   last_initial <- 'Y'   # Replace with your last initial
@@ -123,10 +118,10 @@ for (input_file in input_files) {
     "PMID_Output_", base_name, "_", current_date, first_initial, last_initial, ".csv"
   ))
 
-  # Save the output DataFrame to a CSV file
-  print(paste("Saving output to:", output_file))  # Debugging line
+  # Saves the output to a CSV file
+  print(paste("Saving output to:", output_file))  
   fwrite(dfoutput, output_file)
-  print(paste("Saved output to:", output_file))  # Debugging line
+  print(paste("Saved output to:", output_file))  
 }
 
 # Daniel Fry, 2024
