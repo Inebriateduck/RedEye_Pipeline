@@ -46,7 +46,7 @@ def combine_and_process_excel_files():
     # Generates an output file name
     folder_name = os.path.basename(input_folder)
     timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-    output_file = os.path.join(input_folder, f"{folder_name}_Hex_Cracked_Output_{timestamp}.xlsx")
+    output_file = os.path.join(input_folder, f"{folder_name}_HBOutput_{timestamp}.xlsx")
 
     combined_wb.save(output_file)
 
