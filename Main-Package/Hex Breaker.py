@@ -1,3 +1,5 @@
+# Note that you CANNOT have the target file open while running this script; doing so will result in an error
+
 import os
 import re
 from openpyxl import load_workbook, Workbook
@@ -52,4 +54,6 @@ def combine_and_process_excel_files():
 
 # Run the function
 combine_and_process_excel_files()
+
+
 
