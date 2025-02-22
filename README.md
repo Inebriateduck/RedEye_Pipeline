@@ -1,5 +1,5 @@
 # Automated-Contact-scraping
-### This is still actively under development - currently working on merging Scraper and Hex-breaker into a unified pipeline.
+### This is still actively under development - currently working on merging Scraper and Hex-breaker into a unified pipeline, and making the last function in the script more user-modifiable
 **Scraper** is R script is designed to mine target PMIDs for data. It is designed to be easily scalable with the capabilities of the users hardware - the more CPU cores you have, the faster you'll be able to mine your target information from a list of PMIDs. It incorporates R.Utils as well as 2 other redundant failsafes in case the program runs into a issue when processing a target PMID, as well as automated post-extraction renaming to identify output file batches. 
 
 Post extraction renaming assumes that the input files follow the following naming format: PMIDs_PRAttitudesofAIC_XXXX-XXXX_MMMDDYYXY where XY = initials. This section is not strictly necessary for the code to function and can be replaced with a different function to simply rename the file as an output of the target file. 
