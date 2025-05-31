@@ -1,9 +1,0 @@
-cff-version: 1.2.0
-message: "If you use this software, please cite it as below."
-authors:
-- family-names: "Fry"
-  given-names: "Daniel"
-title: "Automated-Contact-scraping"
-version: 1.0
-date-released: Feb 22, 2025
-url: "https://github.com/Inebriateduck/Automated-Contact-scraping"
