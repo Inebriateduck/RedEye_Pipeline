@@ -1,0 +1,20 @@
+# This CITATION.cff file was generated with cffinit.
+# Visit https://bit.ly/cffinit to generate yours today!
+
+cff-version: 1.2.0
+title: Automated-PMID-Contact_Scraper
+message: >-
+  If you use this software, please cite it using the
+  metadata from this file.
+type: software
+authors:
+  - given-names: Daniel
+    family-names: Fry
+    email: inebriatedduck@gmail.com
+    affiliation: University of Toronto
+repository-code: 'https://github.com/Inebriateduck/Automated-PMID-Scraping'
+abstract: >-
+  R and Python pipeline designed to pull and clean up target
+  information from a list of PMIDs
+version: '1.0'
+date-released: '2025-05-31'
