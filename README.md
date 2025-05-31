@@ -1,5 +1,6 @@
 # Automated-Contact-scraping pipeline
 ### This is still actively under development - It is developed as a volunteer project when I have time (updates may be sporadic, but it is still under active development)
+### For citation information see Citation.cff
 
 ## Scraper.R 
 **Scraper** is an R script is designed to mine target PMIDs for data. It is designed to be easily scalable with the capabilities of the users hardware - the more CPU cores you have, the faster you'll be able to mine your target information from a list of PMIDs. It incorporates R.Utils as well as 2 other redundant failsafes in case the program runs into a issue when processing a target PMID, as well as automated post-extraction renaming to identify output file batches. 
