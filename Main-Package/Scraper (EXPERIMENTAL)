@@ -1,35 +1,62 @@
+# Load required packages
+library(R.utils)
+library(easyPubMed)
+library(readr)
+library(future.apply)
+library(data.table)
+library(parallel)
+
+# Set input and output directories
+input_path <- "C:/Users/awsms/Downloads/Truncation test"     # ← Change this to your input directory
+output_path <- "C:/Users/awsms/Downloads/Truncation test"   # ← Change this to your output directory
+
+if (!dir.exists(output_path)) {
+  dir.create(output_path)
+}
+
+# List all input CSV files
+input_files <- list.files(input_path, pattern = "\\.csv$", full.names = TRUE)
+
+# Function to process a batch of PMIDs with timeout and debugging
 process_pmids_batch <- function(pmids) {
-  print(paste("Processing batch of PMIDs:", paste(pmids, collapse = ", ")))  # Debugging line
+  print(paste("Processing batch of PMIDs:", paste(pmids, collapse = ", ")))
   myquery <- paste(paste(pmids, '[PMID]', sep = ""), collapse = " OR ")
 
-  # Fetch PubMed data for PMIDs
   pubmedID <- tryCatch({
     withTimeout({
-      get_pubmed_ids(myquery)  # Fetch PubMed IDs
-    }, timeout = 25, onTimeout = "error")  # Timeout set to 25 seconds
+      print("Fetching PubMed IDs...")
+      get_pubmed_ids(myquery)
+    }, timeout = 25, onTimeout = "error")
   }, error = function(e) {
-    print(paste("Timeout or error for PMIDs:", paste(pmids, collapse = ", ")))  # Debugging line
-    return(NULL)  # Return NULL if an error occurs
+    print(paste("Timeout or error for PMIDs:", paste(pmids, collapse = ", ")))
+    print(paste("Error message:", e$message))
+    return(NULL)
   })
 
   if (is.null(pubmedID)) {
-    print(paste("No PubMed ID for PMIDs:", paste(pmids, collapse = ", ")))  # Debugging line
-    return(NULL)  # Skip if fetching PubMed IDs fails
+    print(paste("No PubMed ID for PMIDs:", paste(pmids, collapse = ", ")))
+    return(NULL)
   }
 
-  # Fetch abstracts
+  print(paste("PubMed IDs fetched:", paste(pubmedID, collapse = ", ")))
+
   abstractXML <- fetch_pubmed_data(pubmedID)
   if (is.null(abstractXML) || length(abstractXML) == 0) {
-    print(paste("No abstract data for PubMed IDs:", paste(pmids, collapse = ", ")))  # Debugging line
-    return(NULL)  # Skip if no data is fetched
+    print(paste("No abstract data for PubMed IDs:", paste(pmids, collapse = ", ")))
+    return(NULL)
   }
 
-  # Convert XML data to a list of articles
+  print(paste("Raw XML data for PMIDs:", paste(pmids, collapse = ", ")))
+  print(abstractXML)
+
   abstractlist <- articles_to_list(abstractXML)
   if (length(abstractlist) == 0) {
-    print(paste("No articles found for PubMed IDs:", paste(pmids, collapse = ", ")))  # Debugging line
-    return(NULL)  # Skip if no articles are found
+    print(paste("No articles found for PubMed IDs:", paste(pmids, collapse = ", ")))
+    return(NULL)
   }
+
+  print(paste("Articles list for PMIDs:", paste(pmids, collapse = ", ")))
+  print(abstractlist)
 
   df_list <- lapply(abstractlist, function(article) {
     article_to_df(pubmedArticle = article, autofill = TRUE, max_chars = 10)
@@ -38,42 +65,58 @@ process_pmids_batch <- function(pmids) {
   return(df_list)
 }
 
-# Inside the lapply loop where you extract author information:
+# Process each input file
+for (input_file in input_files) {
+  file_base_name <- tools::file_path_sans_ext(basename(input_file))
+  df <- read_csv(input_file, col_names = FALSE)
 
-final.mat <- do.call(rbind, lapply(author.list, function(al) {
-  tmp.lastnm <- custom_grep(xml_data = al, tag = "LastName", format = "char")
-  tmp.firstnm <- custom_grep(xml_data = al, tag = "ForeName", format = "char")
+  print(paste("Processing file:", input_file))
 
-  # Extract email address using regex
-  tmp.email_match <- regexpr("[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}", al)
-  if (tmp.email_match[1] > 0) {
-    tmp.email <- substr(al, tmp.email_match[1], tmp.email_match[1] + attr(tmp.email_match, "match.length") - 1)
-  } else {
-    tmp.email <- NA
+  dfoutput <- data.table(
+    pmid = character(), doi = character(), title = character(),
+    abstract = character(), year = character(), month = character(),
+    day = character(), jabbrv = character(), journal = character(),
+    keywords = character(), lastname = character(), firstname = character(),
+    affiliation = character(), email = character(),
+    stringsAsFactors = FALSE
+  )
+
+  pmids <- df[[1]]  # Assumes PMIDs are in the first column
+
+  # Parallel batch processing
+  plan(multisession, workers = detectCores() - 1)
+  batch_size <- 100
+  pmid_batches <- split(pmids, ceiling(seq_along(pmids) / batch_size))
+
+  results <- future_lapply(pmid_batches, function(batch_pmids) {
+    tryCatch({
+      process_pmids_batch(batch_pmids)
+    }, error = function(e) {
+      message("Error processing batch of PMIDs: ", e$message)
+      return(NULL)
+    })
+  }, future.seed = TRUE)
+
+  valid_results <- unlist(results, recursive = FALSE)
+  valid_results <- valid_results[!sapply(valid_results, is.null)]
+
+  if (length(valid_results) > 0) {
+    dfoutput <- rbindlist(valid_results, fill = TRUE)
   }
 
-  # Extract affiliation address
-  if (regexpr("Affiliation", al) > 0) {
-    tmp.add <- custom_grep(al, "Affiliation", format = "char")[1]
-    tmp.add <- trim_address(tmp.add)
-  } else {
-    tmp.add <- NA
-  }
+  # Naming the output file
+  current_date <- format(Sys.Date(), "%b%d%y")  # e.g., May3125
+  first_initial <- 'X'  # Replace with your first initial
+  last_initial <- 'Y'   # Replace with your last initial
+  name_denom <- sub("^PMIDs_([A-Za-z0-9]+_[A-Za-z0-9]+)_.*", "\\1", file_base_name)
 
-  # Return data with email
-  c(tmp.resout,
-    lastname = tmp.lastnm,
-    firstname = tmp.firstnm,
-    address = tmp.add,
-    email = tmp.email)
-}))
+  output_file <- file.path(
+    output_path,
+    paste0("OUTPUT_", name_denom, "_", current_date, first_initial, last_initial, ".csv")
+  )
 
-# Add email field to final output
-dfoutput <- data.table(final.mat, stringsAsFactors = FALSE)
+  print(paste("Saving output to:", output_file))
+  fwrite(dfoutput, output_file)
+  print(paste("Saved output to:", output_file))
+}
 
-# Output to CSV
-output_file <- file.path(
-  output_path,
-  paste0("OUTPUT_", name_denom, "_", current_date, first_initial, last_initial, ".csv")
-)
-fwrite(dfoutput, output_file)
