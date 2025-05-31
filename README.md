@@ -8,11 +8,12 @@
 1. Load the Scraper.R script into your R instance
 2. On line 15, replace 'Input pathway' with your desired input *folder* pathway.
 3. on line 16, replace 'Output pathway' with your desired output *folder* pathway. 
-  *Note: pathways must use "/" not "\", if you copy the pathway in windows you'll need to replace the "\" characters.*
-4. On lines 110 and 111, input the desired first and last initials
-5. On line 114, replace the "PMIDs_" with where you would like to begin naming the output file (This function preserves the base name of the file and adds a date to the output)
-6. Run the script (My preferred shortcut is Ctrl + Shift + Enter)
-7. The output files will be dumped in the designated output *folder* as individual files corresponding to each file processed.
+
+   *Note: pathways must use "/" not "\", if you copy the pathway in windows you'll need to replace the "\" characters.*
+5. On lines 110 and 111, input the desired first and last initials
+6. On line 114, replace the "PMIDs_" with where you would like to begin naming the output file (This function preserves the base name of the file and adds a date to the output)
+7. Run the script (My preferred shortcut is Ctrl + Shift + Enter)
+8. The output files will be dumped in the designated output *folder* as individual files corresponding to each file processed.
 
 *Note: Scraper assumes that the target PMIDs are located in the first column of the target CSV files. If they are not, you can enter the correct column on line 81 at "df[[1]]" (replace the 1 with the correct value)*
 
