@@ -12,8 +12,8 @@ library(future.apply)
 library(data.table)   
 library(parallel)
 
-input_path <- '/Users/awsms/Downloads/PMIDs_TEST RUN'  # Directory containing input CSV files 
-output_path <- '/Users/awsms/Downloads/PMIDs_TEST RUN'  # Directory to save output files
+input_path <- 'Input pathway'  # Directory containing input CSV files 
+output_path <- 'Output pathway'  # Directory to save output files
 
 if (!dir.exists(output_path)) {
   dir.create(output_path)
