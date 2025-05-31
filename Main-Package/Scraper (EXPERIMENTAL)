@@ -1,0 +1,79 @@
+process_pmids_batch <- function(pmids) {
+  print(paste("Processing batch of PMIDs:", paste(pmids, collapse = ", ")))  # Debugging line
+  myquery <- paste(paste(pmids, '[PMID]', sep = ""), collapse = " OR ")
+
+  # Fetch PubMed data for PMIDs
+  pubmedID <- tryCatch({
+    withTimeout({
+      get_pubmed_ids(myquery)  # Fetch PubMed IDs
+    }, timeout = 25, onTimeout = "error")  # Timeout set to 25 seconds
+  }, error = function(e) {
+    print(paste("Timeout or error for PMIDs:", paste(pmids, collapse = ", ")))  # Debugging line
+    return(NULL)  # Return NULL if an error occurs
+  })
+
+  if (is.null(pubmedID)) {
+    print(paste("No PubMed ID for PMIDs:", paste(pmids, collapse = ", ")))  # Debugging line
+    return(NULL)  # Skip if fetching PubMed IDs fails
+  }
+
+  # Fetch abstracts
+  abstractXML <- fetch_pubmed_data(pubmedID)
+  if (is.null(abstractXML) || length(abstractXML) == 0) {
+    print(paste("No abstract data for PubMed IDs:", paste(pmids, collapse = ", ")))  # Debugging line
+    return(NULL)  # Skip if no data is fetched
+  }
+
+  # Convert XML data to a list of articles
+  abstractlist <- articles_to_list(abstractXML)
+  if (length(abstractlist) == 0) {
+    print(paste("No articles found for PubMed IDs:", paste(pmids, collapse = ", ")))  # Debugging line
+    return(NULL)  # Skip if no articles are found
+  }
+
+  df_list <- lapply(abstractlist, function(article) {
+    article_to_df(pubmedArticle = article, autofill = TRUE, max_chars = 10)
+  })
+
+  return(df_list)
+}
+
+# Inside the lapply loop where you extract author information:
+
+final.mat <- do.call(rbind, lapply(author.list, function(al) {
+  tmp.lastnm <- custom_grep(xml_data = al, tag = "LastName", format = "char")
+  tmp.firstnm <- custom_grep(xml_data = al, tag = "ForeName", format = "char")
+
+  # Extract email address using regex
+  tmp.email_match <- regexpr("[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}", al)
+  if (tmp.email_match[1] > 0) {
+    tmp.email <- substr(al, tmp.email_match[1], tmp.email_match[1] + attr(tmp.email_match, "match.length") - 1)
+  } else {
+    tmp.email <- NA
+  }
+
+  # Extract affiliation address
+  if (regexpr("Affiliation", al) > 0) {
+    tmp.add <- custom_grep(al, "Affiliation", format = "char")[1]
+    tmp.add <- trim_address(tmp.add)
+  } else {
+    tmp.add <- NA
+  }
+
+  # Return data with email
+  c(tmp.resout,
+    lastname = tmp.lastnm,
+    firstname = tmp.firstnm,
+    address = tmp.add,
+    email = tmp.email)
+}))
+
+# Add email field to final output
+dfoutput <- data.table(final.mat, stringsAsFactors = FALSE)
+
+# Output to CSV
+output_file <- file.path(
+  output_path,
+  paste0("OUTPUT_", name_denom, "_", current_date, first_initial, last_initial, ".csv")
+)
+fwrite(dfoutput, output_file)
