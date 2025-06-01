@@ -1,6 +1,6 @@
 # Load required packages
 library(R.utils)
-library(easyPubMed)
+library(RedEye)
 library(readr)
 library(future.apply)
 library(data.table)
