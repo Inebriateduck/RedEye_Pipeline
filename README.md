@@ -3,7 +3,7 @@
 ### For citation information see Citation.cff
 
 ## RedEye
-**RedEye** is an R package based on easyPubMed by Damiano Fantini (https://cran.r-project.org/web/packages/easyPubMed/index.html). It contains a modified email identification regex, allowing it to more effectively extract author email addresses from the PubMed database.
+**RedEye** is an R package based on easyPubMed by [Damiano Fantini](https://cran.r-project.org/web/packages/easyPubMed/index.html). It contains a modified email identification regex, allowing it to more effectively extract author email addresses from the PubMed database.
 
 *For RedEye specific citation, please see the .cff file in the RedEye folder*
  
@@ -15,7 +15,7 @@ After downloading RedEye.tar.gz, open R and do the following Tools > Install Pac
 ### Using RedEye
 Once installed, RedEye can be loaded in R and uses identical functions as easyPubMed. 
 
-A specialized script for extraction of information for cross sectional surveys from the PubMed database is available in (directory TBD). This script is designed to be easily scalable with the capabilities of the users hardware - the more CPU cores you have, the faster you'll be able to mine your target information from a list of PMIDs. 
+A specialized script for extraction of information for cross sectional surveys from the PubMed database is available [here](https://github.com/Inebriateduck/Automated-PMID-Scraping/blob/main/Main-Package/RedEye/RedEye_0.1.0.tar.gz). This script is designed to be easily scalable with the capabilities of the users hardware - the more CPU cores you have, the faster you'll be able to mine your target information from a list of PMIDs. 
 
 To run the script: 
 1. Load the script into your R instance
