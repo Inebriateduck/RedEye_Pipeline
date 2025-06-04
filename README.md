@@ -4,6 +4,7 @@
 
 ## RedEye
 **RedEye** is an R package based on easyPubMed by Damiano Fantini (https://cran.r-project.org/web/packages/easyPubMed/index.html). It contains a modified email identification regex, allowing it to more effectively extract author email addresses from the PubMed database.
+*for RedEye specific citation, please see the .cff file in the RedEye folder*
  
 ### installation
 RedEye is not available through CRAN - installation must be performed manually. 
