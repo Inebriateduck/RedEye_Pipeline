@@ -30,5 +30,6 @@ To run the script:
 **Hex-Breaker** is a python script that allows partial cleanup and merging of the output files from **RedEye**. **Hex-Breaker** works by iterating through each file in a target folder and scanning for hex code outputs that often replace special characters, then translates them into their corresponding character and highlights the corrected cell. Finally, the program merges the individual CSV output files from **Scraper** into a single file.
 
 
-All code Licensed under GPL-2
+**All code Licensed under GPL-2**
+
 C. Daniel Fry, 2025
