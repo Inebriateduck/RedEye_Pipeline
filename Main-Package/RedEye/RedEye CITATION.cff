@@ -1,0 +1,21 @@
+# This CITATION.cff file was generated with cffinit.
+# Visit https://bit.ly/cffinit to generate yours today!
+
+cff-version: 1.2.0
+title: RedEye
+message: >-
+  If you use this software, please cite it using the
+  metadata from this file.
+type: software
+authors:
+  - given-names: Daniel
+    family-names: Fry
+    email: inebriatedduck@gmail.com
+    affiliation: University of Toronto
+repository-code: >-
+  https://github.com/Inebriateduck/Automated-PMID-Scraping/tree/main/Main-Package/RedEye
+abstract: >-
+  Modified version of the easyPubMed package for R
+  containing an improved email identification regex
+license: GPL-2.0
+date-released: '2025-06-01'
