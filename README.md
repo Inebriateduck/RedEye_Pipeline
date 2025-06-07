@@ -1,5 +1,5 @@
 # Automated-Contact-scraping pipeline
-### This is still actively under development - It is developed as a volunteer project when I have time (updates may be sporadic, but it is still under active development)
+#### This is still actively under development - It is developed as a volunteer project when I have time (updates may be sporadic, but it is still under active development)
 ### Please cite this repository if you use the software within
 
 ## RedEye
