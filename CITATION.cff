@@ -1,9 +1,9 @@
 cff-version: 1.2.0
-title: Automated-PMID-Contact_Scraper
+title: RedEye
 message: >-
-  If you use this software, please cite it using the
+  If you used RedEye, please cite it using the
   metadata from this file.
-type:
+type: software
 authors:
   - given-names: Daniel
     family-names: Fry
@@ -11,7 +11,6 @@ authors:
     affiliation: University of Toronto
 repository-code: 'https://github.com/Inebriateduck/Automated-PMID-Scraping'
 abstract: >-
-  R and Python pipeline designed to pull and clean up target
-  information from a list of PMIDs
-version: '1.0'
+  R software designed to pull target data from a list of PubMed identifiers.
 date-released: '2025-05-31'
+license: GLP-2
