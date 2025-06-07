@@ -3,7 +3,7 @@ title: Automated-PMID-Contact_Scraper
 message: >-
   If you use this software, please cite it using the
   metadata from this file.
-type: software
+type:
 authors:
   - given-names: Daniel
     family-names: Fry
