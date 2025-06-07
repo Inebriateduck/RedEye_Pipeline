@@ -1,6 +1,6 @@
 # Automated-Contact-scraping pipeline
 ### This is still actively under development - It is developed as a volunteer project when I have time (updates may be sporadic, but it is still under active development)
-### For citation information see Citation.cff
+### Please cite this repository if you use the software within
 
 ## RedEye
 **RedEye** is an R package based on easyPubMed by [Damiano Fantini](https://cran.r-project.org/web/packages/easyPubMed/index.html). It contains a modified email identification regex, allowing it to more effectively extract author email addresses from the PubMed database.
