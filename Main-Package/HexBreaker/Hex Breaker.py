@@ -1,6 +1,5 @@
 # Note that you CANNOT have the target file open while running this script; doing so will result in an error
 # Your output file will be dumped in the same folder as your inputs and be titled "HB output"
-# Run this to install the needed packages: pip install pandas openpyxl tqdm
 
 import os
 import re
