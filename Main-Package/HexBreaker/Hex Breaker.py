@@ -1,5 +1,6 @@
 # Note that you CANNOT have the target file open while running this script; doing so will result in an error
 # Your output file will be dumped in the same folder as your inputs and be titled "HB output"
+# Input files MUST be in CSV format!
 
 import os
 import re
