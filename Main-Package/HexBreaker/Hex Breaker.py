@@ -1,4 +1,5 @@
 # Note that you CANNOT have the target file open while running this script; doing so will result in an error
+# Run this to install the needed packages: pip install pandas openpyxl tqdm
 
 import os
 import re
