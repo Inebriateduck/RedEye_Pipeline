@@ -4,6 +4,27 @@
 
 import os
 import re
+import sys
+
+# List of required packages
+required_packages = ['pandas', 'openpyxl', 'tqdm']
+
+# Function to check if a package is installed
+def check_package(package):
+    try:
+        __import__(package)
+    except ImportError:
+        print("\033[1;31m" + "="*50)  # Red color, bold text, and divider for visibility
+        print(f"\033[1;31mERROR: Package '{package}' is missing!")
+        print(f"\033[1;31mPlease install it using the following command:")
+        print(f"\033[1;33mpip install {package}\033[1;31m")
+        print("="*50 + "\033[0m")  # Reset color after error message
+        sys.exit(1)
+
+# Check if all required packages are installed
+for package in required_packages:
+    check_package(package)
+
 import pandas as pd
 from datetime import datetime
 from tqdm import tqdm
@@ -75,6 +96,7 @@ combine_and_process_csv_files()
 
 
 #(C) Daniel Fry, 2025
+
 
 
 
