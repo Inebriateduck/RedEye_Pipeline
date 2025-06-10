@@ -1,12 +1,11 @@
 # Install and load necessary packages (uncomment if not installed)
 # install.packages("R.utils")
 # install.packages("readr")
-# install.packages("easyPubMed")
 # install.packages("future.apply")
 # install.packages("data.table")
 
 library(R.utils)      
-library(easyPubMed)   
+library(RedEye)   
 library(readr)        
 library(future.apply) 
 library(data.table)   
