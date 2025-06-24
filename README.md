@@ -16,7 +16,7 @@ After downloading [RedEye.tar.gz](https://github.com/Inebriateduck/Automated-PMI
 ### Using RedEye
 Once installed, RedEye can be loaded in R and uses identical functions as easyPubMed. 
 
-A specialized script for extraction of information for cross sectional surveys from the PubMed database is available [here](https://github.com/Inebriateduck/Automated-PMID-Scraping/blob/main/Main-Package/RedEye/Extraction%20Script.R). This script is designed to be easily scalable with the capabilities of the users hardware - the more CPU cores you have, the faster you'll be able to mine your target information from a list of PMIDs. 
+A specialized script for extraction of information for cross sectional surveys from the PubMed database is available [here](https://github.com/Inebriateduck/Automated-PMID-Scraping/blob/main/Main-Package/RedEye/Extraction%20Script.R). This script is designed to be easily scalable with the capabilities of the users hardware - the more CPU cores you have, the faster you'll be able to mine your target information from a list of PMIDs. Note that this script only reads CSV files, it does not read XLSX format.
 
 To run the script: 
 1. Load the script into your R instance
