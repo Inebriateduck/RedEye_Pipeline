@@ -6,22 +6,19 @@ import os
 import re
 import sys
 
-# List of required packages
 required_packages = ['pandas', 'openpyxl', 'tqdm']
 
-# Function to check if a package is installed
 def check_package(package):
     try:
         __import__(package)
     except ImportError:
-        print("\033[1;31m" + "="*50)  # Red color, bold text, and divider for visibility
+        print("\033[1;31m" + "="*50)  
         print(f"\033[1;31mERROR: Package '{package}' is missing!")
         print(f"\033[1;31mPlease install it using the following command:")
         print(f"\033[1;33mpip install {package}\033[1;31m")
-        print("="*50 + "\033[0m")  # Reset color after error message
+        print("="*50 + "\033[0m")  
         sys.exit(1)
 
-# Check if all required packages are installed
 for package in required_packages:
     check_package(package)
 
@@ -63,17 +60,16 @@ def combine_and_process_csv_files():
         print("No valid data to write.")
         return
 
-    # Normalize column names
+   
     combined_df.columns = combined_df.columns.str.strip().str.lower()
 
     if "email" not in combined_df.columns:
         print("No 'email' column found in the data. Aborting.")
         return
 
-    # Replace unicode hex codes
     combined_df = combined_df.applymap(unicode_hex_to_char)
 
-    # Remove empty or whitespace-only emails
+
     before_cleaning = len(combined_df)
     combined_df = combined_df[combined_df["email"].notna() & (combined_df["email"].str.strip() != "")]
 
@@ -91,7 +87,6 @@ def combine_and_process_csv_files():
         print(f"Failed to save Excel file: {e}")
 
 
-# Run the function
 combine_and_process_csv_files()
 
 
