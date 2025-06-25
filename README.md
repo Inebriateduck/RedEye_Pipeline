@@ -30,7 +30,7 @@ To run the script:
 *Note: The script assumes that the target PMIDs are located in the first column of the target CSV files. If they are not, you can enter the correct column on line 81 at "df[[1]]" (replace the 1 with the correct value)*
 
 ## Hex-Breaker.Py
-**Hex-Breaker** is a python script that allows partial cleanup and merging of the output files from **RedEye**. **Hex-Breaker** works by iterating through each file in a target folder and scanning for hex code outputs that often replace special characters, then translates them into their corresponding character and highlights the corrected cell. Finally, the program merges the individual CSV output files from **RedEye** into a single file. Input files for Hex-breaker **MUST** be in a CSV format, not an XLSX format.
+**Hex-Breaker** is a python script that allows partial cleanup and merging of the output files from **RedEye**. **Hex-Breaker** works by iterating through each file in a target folder and scanning for hex code outputs that often replace special characters, then translates them into their corresponding character and highlights the corrected cell. Finally, the program merges the individual CSV output files from **RedEye** into a single file. Input files for Hex-breaker **MUST** be in a CSV format, not an XLSX format. (I am currently working on making this a python package instead of a script).
 
 
 **All code Licensed under GPL-2**
