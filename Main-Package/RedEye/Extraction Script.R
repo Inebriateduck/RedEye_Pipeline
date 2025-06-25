@@ -1,8 +1,5 @@
-# Install and load necessary packages (uncomment if not installed)
-# install.packages("R.utils")
-# install.packages("readr")
-# install.packages("future.apply")
-# install.packages("data.table")
+# Run line 2 to install the required packages (Red eye needs manual install)
+# install.packages(c("R.utils", "readr", "future.apply", "data.table"))
 
 library(R.utils)      
 library(RedEye)   
