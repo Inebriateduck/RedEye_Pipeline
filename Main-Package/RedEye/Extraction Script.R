@@ -20,6 +20,7 @@ input_files <- list.files(input_path, pattern = "\\.csv$", full.names = TRUE)
 # PMIDs
 process_pmids_batch <- function(pmids) {
   print(paste("Processing batch of PMIDs:", paste(pmids, collapse = ", ")))  # Debugging line
+  myquery <- paste(paste(pmids, '[PMID]', sep = ""), collapse = " OR ")
 
   pubmedID <- tryCatch({
     withTimeout({
