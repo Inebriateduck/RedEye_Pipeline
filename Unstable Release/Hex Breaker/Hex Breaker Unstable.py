@@ -12,11 +12,11 @@ def check_package(package):
     try:
         __import__(package)
     except ImportError:
-        print("\033[1;31m" + "="*50)  
+        print("\033[1;31m" + "="*50)
         print(f"\033[1;31mERROR: Package '{package}' is missing!")
         print(f"\033[1;31mPlease install it using the following command:")
         print(f"\033[1;33mpip install {package}\033[1;31m")
-        print("="*50 + "\033[0m")  
+        print("="*50 + "\033[0m")
         sys.exit(1)
 
 for package in required_packages:
@@ -35,7 +35,7 @@ def unicode_hex_to_char(text):
 
 
 def combine_and_process_csv_files():
-    input_folder = r'/Users/awsms1/Documents/Ng Research/mock output'
+    input_folder = r'/Users/awsms1/Documents/Ng Research/RedEye testing/HB tested'
     output_file = os.path.join(
         input_folder,
         f"{os.path.basename(input_folder)}_HBOutput_{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')}.xlsx"
@@ -60,7 +60,6 @@ def combine_and_process_csv_files():
         print("No valid data to write.")
         return
 
-   
     combined_df.columns = combined_df.columns.str.strip().str.lower()
 
     if "email" not in combined_df.columns:
@@ -69,12 +68,18 @@ def combine_and_process_csv_files():
 
     combined_df = combined_df.applymap(unicode_hex_to_char)
 
-
     before_cleaning = len(combined_df)
     combined_df = combined_df[combined_df["email"].notna() & (combined_df["email"].str.strip() != "")]
 
-    # Remove duplicate emails (keep first)
-    combined_df = combined_df.drop_duplicates(subset="email", keep="first")
+    # Convert year column to numeric for sorting, if present
+    if "year" in combined_df.columns:
+        combined_df["year"] = pd.to_numeric(combined_df["year"], errors='coerce')
+        combined_df = combined_df.sort_values(by=["email", "year"], ascending=[True, False])
+        combined_df = combined_df.drop_duplicates(subset="email", keep="first")
+    else:
+        print("Warning: 'year' column not found. Defaulting to keeping first duplicate.")
+        combined_df = combined_df.drop_duplicates(subset="email", keep="first")
+
     after_cleaning = len(combined_df)
     print(f"Removed {before_cleaning - after_cleaning} rows with empty or duplicate emails.")
 
