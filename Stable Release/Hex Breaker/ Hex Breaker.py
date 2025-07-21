@@ -35,7 +35,7 @@ def unicode_hex_to_char(text):
 
 
 def combine_and_process_csv_files():
-    input_folder = r'/Users/awsms1/Documents/Ng Research/mock output'
+    input_folder = r'YOUR PATHWAY HERE (ie:/Users/inebriatedduck/Documents/RedEye_Target'
     output_file = os.path.join(
         input_folder,
         f"{os.path.basename(input_folder)}_HBOutput_{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')}.xlsx"
