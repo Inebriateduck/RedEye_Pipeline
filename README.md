@@ -1,4 +1,4 @@
-# RedEye-PMID-Contact-scraping pipeline
+# RedEye-Data-scraping pipeline
 ### Please cite this repository if you use the software within
 
 #### This is still actively under development - It is developed as a volunteer project when I have time (updates may be sporadic, but it is still under active development)
