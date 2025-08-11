@@ -1,0 +1,145 @@
+# Your target files MUST be CSV files. RedEye cannot read XLS / XLSX files
+# Run line 2 to install the required packages (Red eye needs manual install)
+# install.packages(c("R.utils", "readr", "future.apply", "data.table", "progressr"))
+
+library(R.utils)      
+library(RedEye)   
+library(readr)        
+library(future.apply) 
+library(data.table)   
+library(parallel)
+library(progressr)
+
+input_path <- 'here'  # Directory containing input CSV files 
+output_path <- 'here'  # Directory to save output files
+
+if (!dir.exists(output_path)) {
+  dir.create(output_path)
+}
+
+input_files <- list.files(input_path, pattern = "\\.csv$", full.names = TRUE)
+
+# PMIDs
+process_pmids_batch <- function(pmids) {
+  print(paste("Processing batch of PMIDs:", paste(pmids, collapse = ", ")))  # Debugging line
+  myquery <- paste(paste(pmids, '[PMID]', sep = ""), collapse = " OR ")
+  
+  pubmedID <- tryCatch({
+    withTimeout({
+      get_pubmed_ids(myquery) 
+    }, timeout = 25, onTimeout = "error")  # Timeout set to 25 seconds
+  }, error = function(e) {
+    print(paste("Timeout or error for PMIDs:", paste(pmids, collapse = ", "))) 
+    return(NULL)  
+  })
+  
+  if (is.null(pubmedID)) {
+    print(paste("No PubMed ID for PMIDs:", paste(pmids, collapse = ", ")))  
+    return(NULL)  
+  }
+  
+  # Abstracts
+  abstractXML <- fetch_pubmed_data(pubmedID)
+  if (is.null(abstractXML) || length(abstractXML) == 0) {
+    print(paste("No abstract data for PubMed IDs:", paste(pmids, collapse = ", ")))  
+    return(NULL)  
+  }
+  
+  # XML data conversion
+  abstractlist <- articles_to_list(abstractXML)
+  if (length(abstractlist) == 0) {
+    print(paste("No articles found for PubMed IDs:", paste(pmids, collapse = ", ")))  
+    return(NULL)  
+  }
+  
+  df_list <- lapply(abstractlist, function(article) {
+    article_to_df(pubmedArticle = article, autofill = TRUE, max_chars = 10)
+  })
+  
+  return(df_list)
+}
+
+# Input processing
+for (input_file in input_files) {
+  file_base_name <- tools::file_path_sans_ext(basename(input_file))  
+  df <- read_csv(input_file, col_names = FALSE)  
+  
+  print(paste("Processing file:", input_file))
+  
+  dfoutput <- data.table(
+    pmid = character(), doi = character(), title = character(),
+    abstract = character(), year = character(), month = character(),
+    day = character(), jabbrv = character(), journal = character(),
+    keywords = character(), lastname = character(), firstname = character(),
+    affiliation = character(), email = character(),
+    stringsAsFactors = FALSE
+  )
+  
+  pmids <- df[[1]]  # Assumes PMIDs are in the first column
+  
+  total_pmids <- length(pmids)  # Total PMIDs in this file
+  failed_pmids_count <- 0       # Counter for failed PMIDs in this file
+  
+  plan(multisession, workers = detectCores() - 1)  # Adjust based on system cores
+  
+  # Batch splitting
+  batch_size <- 100  # Batch size
+  pmid_batches <- split(pmids, ceiling(seq_along(pmids) / batch_size))
+  
+  # Use progressr to show progress bar for batches
+  handlers(global = TRUE)
+  handlers("txtprogressbar")  # simple console progress bar
+  
+  results <- with_progress({
+    p <- progressor(along = pmid_batches)
+    
+    future_lapply(pmid_batches, function(batch_pmids) {
+      tryCatch({
+        out <- process_pmids_batch(batch_pmids)
+        p()  # advance progress bar
+        out
+      }, error = function(e) {
+        message("Error processing batch of PMIDs: ", e$message)
+        p()  # advance even if error
+        NULL
+      })
+    }, future.seed = TRUE)
+  })
+  
+  # Count failed PMIDs from batches returning NULL
+  for (i in seq_along(results)) {
+    if (is.null(results[[i]])) {
+      failed_pmids_count <- failed_pmids_count + length(pmid_batches[[i]])
+    }
+  }
+  
+  valid_results <- unlist(results, recursive = FALSE)
+  valid_results <- valid_results[!sapply(valid_results, is.null)]
+  
+  if (length(valid_results) > 0) {
+    dfoutput <- rbindlist(valid_results, fill = TRUE)
+  }
+  
+  current_date <- format(Sys.Date(), "%b%d%y") 
+  first_initial <- 'X'  # Replace with your first initial
+  last_initial <- 'Y'   # Replace with your last initial
+  
+  name_denom <- sub("^PMIDs_([A-Za-z0-9]+_[A-Za-z0-9]+)_.*", "\\1", file_base_name)
+  
+  output_file <- file.path(
+    output_path,
+    paste0("OUTPUT_", name_denom, "_", current_date, first_initial, last_initial, ".csv")
+  )
+  
+  print(paste("Saving output to:", output_file))  
+  fwrite(dfoutput, output_file)
+  print(paste("Saved output to:", output_file))  
+  
+  print(paste0("Summary for file ", basename(input_file), ":"))
+  print(paste("Total PMIDs:", total_pmids))
+  print(paste("Failed PMIDs:", failed_pmids_count))
+  print(paste("Successfully processed PMIDs:", total_pmids - failed_pmids_count))
+}
+
+# C. Daniel Fry, 2025
+
