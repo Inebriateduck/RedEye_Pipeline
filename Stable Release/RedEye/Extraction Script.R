@@ -1,16 +1,22 @@
 # Your target files MUST be CSV files. RedEye cannot read XLS / XLSX files
-# Run line 2 to install the required packages (Red eye needs manual install)
-# install.packages(c("R.utils", "readr", "future.apply", "data.table"))
+# If you encounter an error that you cannot fix, please open a ticket on the 
+# project github
+#-------------------------------------------------------------------------------------
+# Run the following line to install all required packages
+# install.packages(c("R.utils", "readr", "future.apply", "data.table", "progressr")) 
+#-------------------------------------------------------------------------------------
 
+#----Setup-----------
 library(R.utils)      
 library(RedEye)   
 library(readr)        
 library(future.apply) 
 library(data.table)   
 library(parallel)
+library(progressr)
 
-input_path <- 'Input pathway'  # Directory containing input CSV files 
-output_path <- 'Output pathway'  # Directory to save output files
+input_path <- 'here'  # Directory containing input CSV files 
+output_path <- 'here'  # Directory to save output files
 
 if (!dir.exists(output_path)) {
   dir.create(output_path)
@@ -18,11 +24,11 @@ if (!dir.exists(output_path)) {
 
 input_files <- list.files(input_path, pattern = "\\.csv$", full.names = TRUE)
 
-# PMIDs
+#----------------- PMIDs -----------------------------------------------------
 process_pmids_batch <- function(pmids) {
-  print(paste("Processing batch of PMIDs:", paste(pmids, collapse = ", ")))  # Debugging line
+  print(paste("Processing batch of PMIDs:", paste(pmids, collapse = ", "))) 
   myquery <- paste(paste(pmids, '[PMID]', sep = ""), collapse = " OR ")
-
+  
   pubmedID <- tryCatch({
     withTimeout({
       get_pubmed_ids(myquery) 
@@ -37,14 +43,14 @@ process_pmids_batch <- function(pmids) {
     return(NULL)  
   }
   
-  # Abstracts
+  #------------------------ Abstracts ------------------------------------------------
   abstractXML <- fetch_pubmed_data(pubmedID)
   if (is.null(abstractXML) || length(abstractXML) == 0) {
     print(paste("No abstract data for PubMed IDs:", paste(pmids, collapse = ", ")))  
     return(NULL)  
   }
-  
-  # XML data conversion
+
+  #---------------------------XML data conversion---------------------------------------
   abstractlist <- articles_to_list(abstractXML)
   if (length(abstractlist) == 0) {
     print(paste("No articles found for PubMed IDs:", paste(pmids, collapse = ", ")))  
@@ -58,7 +64,7 @@ process_pmids_batch <- function(pmids) {
   return(df_list)
 }
 
-# Input processing
+#-----------Input processing----------------------------------------------------
 for (input_file in input_files) {
   file_base_name <- tools::file_path_sans_ext(basename(input_file))  
   df <- read_csv(input_file, col_names = FALSE)  
@@ -74,39 +80,54 @@ for (input_file in input_files) {
     stringsAsFactors = FALSE
   )
   
-  pmids <- df[[1]]  # Assumes PMIDs are in the first column
+  pmids <- df[[1]]  # This line assumes PMIDs are in the first column, modify as needed
   
+  total_pmids <- length(pmids)  
+  failed_pmids_count <- 0       
   
-  plan(multisession, workers = detectCores() - 1)  # Adjust based on system cores
+  plan(multisession, workers = detectCores() - 1)  # Total cores minus 1, adjust as needed
   
-  # Batch splitting
-  batch_size <- 100  # Batch size
+  #-------------------Batch splitting--------------------------------
+  batch_size <- 100  
   pmid_batches <- split(pmids, ceiling(seq_along(pmids) / batch_size))
   
-  # Parallel processing of batches
-  results <- future_lapply(pmid_batches, function(batch_pmids) {
-    tryCatch({
-      process_pmids_batch(batch_pmids)
-    }, error = function(e) {
-      message("Error processing batch of PMIDs: ", e$message)
-      return(NULL)
-    })
-  }, future.seed = TRUE) 
+  handlers(global = TRUE)
+  handlers("txtprogressbar") 
+  
+  results <- with_progress({
+    p <- progressor(along = pmid_batches)
+    
+    future_lapply(pmid_batches, function(batch_pmids) {
+      tryCatch({
+        out <- process_pmids_batch(batch_pmids)
+        p() 
+        out
+      }, error = function(e) {
+        message("Error processing batch of PMIDs: ", e$message)
+        p() 
+        NULL
+      })
+    }, future.seed = TRUE)
+  })
+  
+  for (i in seq_along(results)) {
+    if (is.null(results[[i]])) {
+      failed_pmids_count <- failed_pmids_count + length(pmid_batches[[i]])
+    }
+  }
   
   valid_results <- unlist(results, recursive = FALSE)
   valid_results <- valid_results[!sapply(valid_results, is.null)]
   
   if (length(valid_results) > 0) {
-    # Final output binding
     dfoutput <- rbindlist(valid_results, fill = TRUE)
   }
   
-  # Generates new output file name
+  #------------Output naming------------------------------
   current_date <- format(Sys.Date(), "%b%d%y") 
   first_initial <- 'X'  # Replace with your first initial
   last_initial <- 'Y'   # Replace with your last initial
   
-  # Extracts if named in specified format below
   name_denom <- sub("^PMIDs_([A-Za-z0-9]+_[A-Za-z0-9]+)_.*", "\\1", file_base_name)
   
   output_file <- file.path(
@@ -114,10 +135,14 @@ for (input_file in input_files) {
     paste0("OUTPUT_", name_denom, "_", current_date, first_initial, last_initial, ".csv")
   )
   
-  # Output to CSV file
   print(paste("Saving output to:", output_file))  
   fwrite(dfoutput, output_file)
   print(paste("Saved output to:", output_file))  
+  
+  print(paste0("Summary for file ", basename(input_file), ":"))
+  print(paste("Total PMIDs:", total_pmids))
+  print(paste("Failed PMIDs:", failed_pmids_count))
+  print(paste("Successfully processed PMIDs:", total_pmids - failed_pmids_count))
 }
 
 # C. Daniel Fry, 2025
