@@ -20,17 +20,15 @@ A specialized script for extraction of information for cross sectional surveys f
 
 To run the script: 
 1. Load the script into your R instance
-2. On line 15, replace 'Input pathway' with your desired input *folder* pathway.
-3. on line 16, replace 'Output pathway' with your desired output *folder* pathway.
-4. On lines 110 and 111, input the desired first and last initials
-5. On line 114, replace the "PMIDs_" with where you would like to begin naming the output file (This function preserves the base name of the file and adds a date to the output)
-6.  Run the script (My preferred shortcut is Ctrl + Shift + Enter)
-7. The output files will be dumped in the designated output *folder* as individual files corresponding to each file processed.
+2. Replace 'Input pathway' with your desired input *folder* pathway.
+3. Replace 'Output pathway' with your desired output *folder* pathway.
+4. Run the script (My preferred shortcut is Ctrl + Shift + Enter)
+5. The output files will be dumped in the designated output *folder* as individual files corresponding to each file processed.
 
 *Note: The script assumes that the target PMIDs are located in the first column of the target CSV files. If they are not, you can enter the correct column on line 81 at "df[[1]]" (replace the 1 with the correct value)*
 
 ## Hex-Breaker.Py
-**Hex-Breaker** is a python script that allows partial cleanup and merging of the output files from **RedEye**. **Hex-Breaker** works by iterating through each file in a target folder and scanning for hex code outputs that often replace special characters, then translates them into their corresponding character and highlights the corrected cell. Finally, the program merges the individual CSV output files from **RedEye** into a single file. Input files for Hex-breaker **MUST** be in a CSV format, not an XLSX format. (I am currently working on making this a python package instead of a script).
+**Hex-Breaker** is the second step in the pipeline. It is a python script that removes duplicate values (ie: email addresses) and cleans up scrambled outputs that are known to relpace special characters. I am currently attemting to integrate it into **RedEye_Extractor** using Reticulate. 
 
 
 **All code Licensed under GPL-2**
