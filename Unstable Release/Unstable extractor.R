@@ -20,7 +20,7 @@ if (!dir.exists(output_path)) {
 
 input_files <- list.files(input_path, pattern = "\\.csv$", full.names = TRUE)
 
-# ---- PMIDs batch processing function ----
+# ---- PMIDs ----
 process_pmids_batch <- function(pmids) {
   print(paste("Processing batch of PMIDs:", paste(pmids, collapse = ", ")))  
   myquery <- paste(paste(pmids, '[PMID]', sep = ""), collapse = " OR ")
@@ -49,7 +49,7 @@ process_pmids_batch <- function(pmids) {
   return(df_list)
 }
 
-# ---- Input processing loop ----
+# ---- Data extraction ----
 for (input_file in input_files) {
   df <- read_csv(input_file, col_names = FALSE)  
   print(paste("Processing file:", input_file))
@@ -100,7 +100,7 @@ for (input_file in input_files) {
   
   if (length(valid_results) > 0) dfoutput <- rbindlist(valid_results, fill = TRUE)
   
-  # ---- Simplified output filename ----
+  # ---- Output & failures ----
   output_file <- file.path(output_path, basename(input_file))
   
   print(paste("Saving output to:", output_file))  
@@ -113,7 +113,7 @@ for (input_file in input_files) {
   print(paste("Successfully processed PMIDs:", total_pmids - failed_pmids_count))
 }
 
-# ---- Pass output folder to Hex Breaker ----
+# ---- Hex Breaker call ----
 output_path <- normalizePath(output_path)
 writeLines(output_path, "output_path.txt")
 
