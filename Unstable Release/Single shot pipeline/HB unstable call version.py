@@ -9,7 +9,7 @@ import pandas as pd
 from datetime import datetime
 from tqdm import tqdm
 
-# ---- Dependency check for stupid people ----
+# ---- Dependency check for dotards ----
 required_packages = ['pandas', 'openpyxl', 'tqdm']
 
 def check_package(package):
