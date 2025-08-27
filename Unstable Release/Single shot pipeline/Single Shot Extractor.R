@@ -118,7 +118,7 @@ output_path <- normalizePath(output_path)
 writeLines(output_path, "output_path.txt")
 
 py_install(c("pandas", "openpyxl", "tqdm"))
-source_python("location of RedEye Controlled Hex Breaker.py")
+source_python("Python input")
 
 excel_file <- combine_and_process_csv_files(output_path)
 cat("Final Excel file created at:", excel_file, "\n")
