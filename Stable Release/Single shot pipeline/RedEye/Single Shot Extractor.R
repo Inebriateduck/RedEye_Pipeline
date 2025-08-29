@@ -1,6 +1,6 @@
 # Your target files MUST be CSV files. RedEye cannot read XLS / XLSX files
 # Run line 2 to install the required packages (Red eye needs manual install)
-# install.packages(c("R.utils", "readr", "future.apply", "data.table", "progressr"))
+# install.packages(c("R.utils", "readr", "future.apply", "data.table", "progressr", "reticulate"))
 
 library(R.utils)      
 library(RedEye)   
