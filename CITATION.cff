@@ -1,0 +1,16 @@
+cff-version: 1.2.0
+title: RedEye_Pipeline
+message: >-
+  If you use this software, please cite it using the
+  metadata from this file.
+type: software
+authors:
+  - given-names: Daniel
+    family-names: Fry
+    email: inebriatedduck@gmail.com
+    affiliation: University of Toronto
+  - given-names: Wid al-zharaa
+    family-names: al-Khafaji
+    email: wid.a.alkhafaji@gmail.com
+    affiliation: McMaster University
+    orcid: 'https://orcid.org/0009-0005-0900-6200'
