@@ -19,15 +19,16 @@ After downloading [RedEye.tar.gz](https://github.com/Inebriateduck/RedEye_Pipeli
 ## Using the pipeline
 
 1. Ensure that you have [R](https://www.r-project.org/), [R studio](https://posit.co/download/rstudio-desktop/) and [Python](https://www.python.org/) installed on your machine
-2. Open R studio and install the RedEye package by doing the following: Tools > Install Packages > Package Archive File > RedEye.tar.gz.
-3. Once installed, RedEye can be loaded in R and uses identical functions as easyPubMed.
-4. Download [Hex Breaker](https://github.com/Inebriateduck/RedEye_Pipeline/tree/main/Stable%20Release/Single%20shot%20pipeline/Hex%20Breaker). Take note of the download path, it will be required later.
-5. Create a new R script
-6. Copy the [extraction script](https://github.com/Inebriateduck/RedEye_Pipeline/blob/main/Unstable%20Release/Single%20shot%20pipeline/Unstable%20extractor.R) into your new script section
-7. Replace 'Input pathway' with the pathway to the *folder* containing your PMID bearing CSV files
-8. Replace 'Output pathway' with your desired output directory. If the specified file does not exist, RedEye will make a new file with that name at the target location
-9. Replace 'Python input' with the path to the Hex Breaker file (including the file itself, it should have .py at the end)
-10. Run the script (Ctrl + Shift + Enter is a useful shortcut)
+2. Download [RedEye Extractor](https://github.com/Inebriateduck/RedEye_Pipeline/tree/main/Stable%20Release/Single%20shot%20pipeline/RedEye)
+3. Open R studio and install the RedEye package by doing the following: Tools > Install Packages > Package Archive File > RedEye.tar.gz.
+4. Once installed, RedEye can be loaded in R and uses identical functions as easyPubMed.
+5. Download [Hex Breaker](https://github.com/Inebriateduck/RedEye_Pipeline/tree/main/Stable%20Release/Single%20shot%20pipeline/Hex%20Breaker). Take note of the download path, it will be required later.
+6. Create a new R script
+7. Copy the [extraction script](https://github.com/Inebriateduck/RedEye_Pipeline/blob/main/Unstable%20Release/Single%20shot%20pipeline/Unstable%20extractor.R) into your new script section
+8. Replace 'Input pathway' with the pathway to the *folder* containing your PMID bearing CSV files
+9. Replace 'Output pathway' with your desired output directory. If the specified file does not exist, RedEye will make a new file with that name at the target location
+10. Replace 'Python input' with the path to the Hex Breaker file (including the file itself, it should have .py at the end)
+11. Run the script (Ctrl + Shift + Enter is a useful shortcut)
 
 **All code Licensed under GPL-2**
 
