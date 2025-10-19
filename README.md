@@ -1,4 +1,4 @@
-![Header](./[RedEye_Pipeline/github-header-banner.png])
+![Header](./RedEye Banner.png)
 
 # RedEye data scraping pipeline
 ### Please cite this repository if you use the software within
