@@ -19,7 +19,7 @@ Ensure that you have [R](https://www.r-project.org/), [R studio](https://posit.c
 7. Replace 'Input pathway' with the pathway to the *folder* containing your PMID bearing CSV files
 8. Replace 'Output pathway' with your desired output directory. If the specified file does not exist, RedEye will make a new file with that name at the target location
 9. Replace 'Python input' with the path to the Hex Breaker file in the .zip file (including the file itself, it should have .py at the end)
-10. Run the script (Ctrl + Shift + Enter is a useful shortcut).  RedEye is designed to aggressively leverage the parallel processing capabilities of a system by using n-1 threads at default settings, where n = the number of threads in a a system- as such, systems with a higher CPU thread count will complete jobs faster. Note that even with strong system specs, very large files can have extended run times. 
+10. Run the script (*Ctrl + Shift + Enter is a useful shortcut*).  RedEye is designed to aggressively leverage the parallel processing capabilities of a system by using n-1 threads at default settings, where n = the number of threads in a a system- as such, systems with a higher CPU thread count will complete jobs faster. Note that even with strong system specs, very large files can have extended run times. 
 
 # Technical notes
 
