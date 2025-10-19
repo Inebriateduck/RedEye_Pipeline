@@ -1,4 +1,4 @@
-![Header](./RedEye Banner.png)
+![Header](./RedEye_Banner.png)
 
 # RedEye data scraping pipeline
 ### Please cite this repository if you use the software within
