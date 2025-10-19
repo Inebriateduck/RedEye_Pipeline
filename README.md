@@ -25,17 +25,17 @@ Ensure that you have [R](https://www.r-project.org/), [R studio](https://posit.c
 
 ## Pipeline Components
 ### RedEye.R
-**RedEye** is an R package based on easyPubMed by [Damiano Fantini](https://cran.r-project.org/web/packages/easyPubMed/index.html). It is optimized towards extraction of email addresses for the purpose of cross sectional surveys.
+**RedEye.R** is an R package based on easyPubMed by [Damiano Fantini](https://cran.r-project.org/web/packages/easyPubMed/index.html). It contains greedier regular expressions optimized towards the extraction of email addresses from provided PMIDs.
  
 ### installation
-RedEye is not available through CRAN - installation must be performed manually. The tar.gz file can be found in the [RedEye.zip](https://github.com/Inebriateduck/RedEye_Pipeline/blob/main/Stable%20Release/RedEye.zip) file or as an [individual download](https://github.com/Inebriateduck/RedEye_Pipeline/tree/main/Stable%20Release/Single%20shot%20pipeline/RedEye)
+RedEye.R is not available through CRAN - installation must be performed manually. The tar.gz file can be found in the [RedEye.zip](https://github.com/Inebriateduck/RedEye_Pipeline/blob/main/Stable%20Release/RedEye.zip) file or as an [individual download](https://github.com/Inebriateduck/RedEye_Pipeline/tree/main/Stable%20Release/Single%20shot%20pipeline/RedEye)
 
 After downloading and unzipping (if the .zip file was used), open R and do the following: Tools > Install Packages > Package Archive File > RedEye.tar.gz. 
 
 ### RedEye Extractor & Hex Breaker
 [RedEye Extractor](https://github.com/Inebriateduck/RedEye_Pipeline/tree/main/Stable%20Release/Single%20shot%20pipeline/RedEye) is a specialized script for extraction of information for cross sectional surveys from the PubMed database. This script is designed to be easily scalable with the capabilities of the users hardware - the more CPU cores you have, the faster you'll be able to mine your target information from a list of PMIDs. Note that this script only reads CSV files, it does not read XLSX format.
 
-Hex Breaker is the second step in the pipeline, and is automatically called by the R script ujpon completion of the portion of the job requiring R. It is a python script that removes duplicate values (ie: email addresses) and cleans up invalid outputs. When removing duplicate emails, Hex Breaker will maintain the most recent instance of the address (for example, one found in 2024 will be removed in favour of one from 2025). It is included in the [RedEye.zip](https://github.com/Inebriateduck/RedEye_Pipeline/blob/main/Stable%20Release/RedEye.zip) file.
+Hex Breaker is the second step in the pipeline, and is automatically called by the R script on completion of the R section of the job. It is a python script that removes duplicate values (ie: email addresses) and cleans up invalid outputs. When removing duplicate emails, Hex Breaker will maintain the most recent instance of the address (for example, one found in 2024 will be removed in favour of one from 2025). It is included in the [RedEye.zip] (https://github.com/Inebriateduck/RedEye_Pipeline/blob/main/Stable%20Release/RedEye.zip) file.
 
 
 #### This is still actively under development - It is developed as a volunteer project when I have time (updates may be sporadic, but it is still under active development)
