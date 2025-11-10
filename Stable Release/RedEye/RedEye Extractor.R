@@ -118,7 +118,7 @@ output_path <- normalizePath(output_path)
 writeLines(output_path, "output_path.txt")
 
 py_install(c("pandas", "openpyxl", "tqdm"))
-source_python("Path to Controlled Hex Breaker.py")
+source_python("/path/to/Hex_Breaker.py") #<--- replace with file path (includes file)
 
 excel_file <- combine_and_process_csv_files(output_path)
 cat("Final Excel file created at:", excel_file, "\n")
