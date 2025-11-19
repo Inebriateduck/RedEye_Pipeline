@@ -43,7 +43,7 @@ Hex Breaker is the second step in the pipeline, and is automatically called by t
 @@@ ORcS is only included in unstable releases until further testing @@@
 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 ```
-OVID Recursive Scraper (ORcS) is designed to make your life easier when pulling PMIDs directly from unprocessed OVID dowloads. It's called by RedEye upstream of the rest of the pipeline and preprocesses the OVID .xls files so that they only contain PMIDs, then feeds the resulting CSVs to RedEye.R
+OVID Recursive Scraper (ORcS) is designed to make your life easier when pulling PMIDs directly from unprocessed OVID dowloads. It's called by RedEye upstream of the rest of the pipeline and preprocesses the OVID .xls files so that they only contain PMIDs, then feeds the resulting CSVs to RedEye.R. I'm currently working on making it modular.
 
 #### This is still actively under development - It is developed as a volunteer project when I have time (updates may be sporadic)
 **All code Licensed under GPL-2**
