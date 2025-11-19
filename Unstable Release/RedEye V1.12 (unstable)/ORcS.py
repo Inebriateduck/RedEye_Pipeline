@@ -23,9 +23,7 @@ def orcs_strip(
         infile = os.path.join(input_dir, file)
         
         try:
-            # Try reading with pandas first (works for both .xls and .xlsx)
             if file_lower.endswith((".xls", ".xlsx")):
-                # Use openpyxl engine for .xlsx, None for .xls (will try xlrd then others)
                 engine = 'openpyxl' if file_lower.endswith('.xlsx') else None
                 df = pd.read_excel(infile, header=None, engine=engine)
             elif file_lower.endswith(".csv"):
@@ -37,7 +35,6 @@ def orcs_strip(
             print(f"ERROR reading '{file}': {e}")
             print("Attempting alternative read method...")
             
-            # Fallback: read with openpyxl directly (ignores hyperlinks)
             try:
                 wb = load_workbook(infile, data_only=True)
                 ws = wb.active
@@ -47,26 +44,23 @@ def orcs_strip(
                 print(f"FAILED to read '{file}' with alternative method: {e2}")
                 continue
         
-        # Remove top rows
         if skip_top_rows > 0:
             df = df.iloc[skip_top_rows:, :]
-        
-        # Remove additional specific rows
+       # row remover 
         if rows_to_skip:
             df = df.drop(rows_to_skip, errors="ignore")
-        
-        # Remove specified columns
+        # col remover
         if cols_to_skip:
             df = df.drop(columns=cols_to_skip, errors="ignore")
         
-        # Extract target column
+        # extraction
         if extract_col < df.shape[1]:
             extracted = df.iloc[:, [extract_col]]
         else:
             print(f"WARNING: File '{file}' only has {df.shape[1]} columns. Skipping.")
             continue
         
-        # Construct output filename
+        # output file
         base = os.path.splitext(file)[0]
         outfile = os.path.join(outdir, f"{base}_ORCS.csv")
         extracted.to_csv(outfile, index=False, header=False)
