@@ -37,6 +37,12 @@ After downloading and unzipping (if the .zip file was used), open R and do the f
 
 Hex Breaker is the second step in the pipeline, and is automatically called by the R script on completion of the R section of the job. It is a python script that removes duplicate values (ie: email addresses) and cleans up invalid outputs. When removing duplicate emails, Hex Breaker will maintain the most recent instance of the address (for example, one found in 2024 will be removed in favour of one from 2025). It is included in the [RedEye.zip] (https://github.com/Inebriateduck/RedEye_Pipeline/blob/main/Stable%20Release/RedEye.zip) file.
 
+### ORcS
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@@ ORcS is only included in unstable releases until further testing @@@
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+OVID Recursive Scraper (ORcS) is designed to make your life easier when pulling PMIDs directly from unprocessed OVID dowloads. It's called by RedEye upstream of the rest of the pipeline and preprocesses the OVID .xls files so that they only contain PMIDs, then feeds the resulting CSVs to RedEye.R
 
 #### This is still actively under development - It is developed as a volunteer project when I have time (updates may be sporadic)
 **All code Licensed under GPL-2**
