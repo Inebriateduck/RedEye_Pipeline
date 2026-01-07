@@ -21,9 +21,9 @@ Ensure that you have [R](https://www.r-project.org/), [R studio](https://posit.c
 4. Once installed, RedEye can be loaded in R and uses identical functions as easyPubMed.
 5. Open Extraction_Script.R
 6. Run line 2 of the script to install all requisite packages
-7. Replace '/Input/path/here' with the pathway to your folder containing your OVID files or PMID list(s) (PMID lists must be in CSV format)
-8. Replace 'Output pathway' with your desired output directory. If the specified file does not exist, RedEye will make a new file with that name at the target location
-9. Replace '/Path/to/RedEye_V1.2/R.Scripts' with the path the the R.Scripts subfolder in the RedEye_V1.2 folder
+7. Replace ```'/Input/path/here'``` with the pathway to your folder containing your OVID files or PMID list(s) (PMID lists must be in CSV format)
+8. Replace ```'Output pathway'``` with your desired output directory. If the specified file does not exist, RedEye will make a new file with that name at the target location
+9. Replace ```'/Path/to/RedEye_V1.2/R.Scripts'``` with the path the the R.Scripts subfolder in the RedEye_V1.2 folder
 10. Run the script with (Ctrl + Shift + Enter)
 
 # Technical notes
