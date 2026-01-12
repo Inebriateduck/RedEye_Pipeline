@@ -13,14 +13,17 @@ library(reticulate)
 #@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ RedEye Config @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 #@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
-input_path  <- "/Users/awsms1/Downloads/RedEye_v.1.13 testbed"
-output_path <- "/Users/awsms1/Downloads/RedEye_v.1.13 testbed/output"
-use_orcs    <- TRUE
+input_path  <- "/Path/to/input/folder" #<------ Directory to your input folder. Files must be .XLS format if ORcS = TRUE, otherwise they must be .CSV format
+output_path <- "/Path/to/output/folder" #<------ Directory to your desired output folder. If it doesn't exist, RedEye will make it.
+use_orcs    <- TRUE #<----- OVID file processing toggle. Change to FALSE if you're using a list of PMIDs instead of an OVID output.
 
 if (!dir.exists(output_path)) dir.create(output_path, recursive = TRUE)
 
-SCRIPTS_ROOT <- normalizePath("/Users/awsms1/Downloads/RedEye_V1.2/Scripts")
+SCRIPTS_ROOT <- normalizePath("/Path/to/RedEye_V1.2/Scripts") #<----- Directory to your scripts here
 assign("SCRIPTS_ROOT", SCRIPTS_ROOT, envir = .GlobalEnv)
+
+
+
 
 #@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 #@@@@@@@@@@@@@@@@@@@@@@@@@ Function calls (Modify at your own risk) @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
