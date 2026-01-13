@@ -1,7 +1,7 @@
 ![Header](./RedEye_Banner.png)
 
 # Overview
-RedEye is a data scraping pipeline intended for use in cross sectional surveys by users with limited programming expertise. It is designed to rapidly extract author-linked metadata (ie; emails, institutions, etc...) from provided PMIDs. RedEye is designed to aggressively leverage the parallel processing capabilities of a system by using n-1 threads at default settings, where n = the number of threads in a a system- as such, systems with a higher CPU thread count will complete jobs faster. Note that even with strong system specs, very large files can have extended run times. 
+RedEye is a data scraping pipeline intended for use in cross sectional surveys by users with limited programming expertise. It is designed to rapidly extract author-linked metadata (ie; emails, institutions, etc...) from provided PMIDs.
 
 #### Please cite this repository if you use the software within
 ```
