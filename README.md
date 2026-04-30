@@ -22,7 +22,7 @@ Ensure that you have [R](https://www.r-project.org/), [R studio](https://posit.c
 5. Open ```Launcher.R```
 7. Replace ```'/Input/path/here'``` with the pathway to your folder containing your OVID files or PMID list(s) (PMID lists must be in CSV format)
 8. Replace ```'Output pathway'``` with your desired output directory. If the specified file does not exist, RedEye will make a new file with that name at the target location
-9. If you are working with a direct OVID output, replace ```SYKO       <- FALSE ``` with ```SYKO       <- TRUE```. Otherwise, retain as ```FALSE```
+9. If you are working with a direct OVID output, replace ```SYKO<- FALSE ``` with ```SYKO<- TRUE```. Otherwise, retain as ```FALSE```
 12. Run the script (Ctrl + Shift + Enter)
 
 # Technical notes
