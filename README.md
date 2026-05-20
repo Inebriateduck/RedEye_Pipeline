@@ -1,12 +1,12 @@
 ![Header](./RedEye_Banner.png)
 
 # Overview
-RedEye is a data scraping pipeline intended for use in cross sectional surveys by users with limited programming expertise. It is designed to rapidly extract author-linked metadata (ie; emails, institutions, etc...) from a list of provided PMIDs or an OVID output file. RedEye is designed with scalability in mind, employing aggressive multithreading to enable extremely rapid extractions of metadata - at default settings this is n-1 cores, where n is the number of threads available in the system, but this can be modified at will. 
+RedEye is a metadata scraping pipeline for use in cross sectional surveys, and is designed with accessibility for users with limited programming expertise in mind. By leveraging multi-threading, it is able to rapidly extracted author linked metadata (ie; author emails, institutions, etc...) from a provided list of PMIDs or an OVID output file. Via these methods, the contact information of tens of thousands of authors can be extracted within minutes. 
 
 #### Please cite this repository if you use the software within
 ```
 Fry, D., Al-Khafaji, W. RedEye Pipeline [Software]. (V1.0). Toronto: Daniel Fry (2025). [Accession date] Retrieved from https://github.com/Inebriateduck/RedEye_Pipeline
-DOI: 10.5281/zenodo.16996504
+10.5281/zenodo.16996503
 ```
 
 # Technical notes
