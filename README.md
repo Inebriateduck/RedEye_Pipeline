@@ -9,22 +9,6 @@ Fry, D., Al-Khafaji, W. RedEye Pipeline [Software]. (V1.0). Toronto: Daniel Fry 
 DOI: 10.5281/zenodo.16996504
 ```
 
-## Pre-requisites
-
-Ensure that you have [R](https://www.r-project.org/), [R studio](https://posit.co/download/rstudio-desktop/) and [Python](https://www.python.org/) installed on your machine
-
-## Using the pipeline
-
-1. Download [RedEye.zip](https://github.com/Inebriateduck/RedEye_Pipeline/blob/main/Stable%20Release/V1.2/RedEye_V1.2.zip)
-2. Unzip the file
-3. Open R studio and install the RedEye package by doing the following: ```Tools > Install Packages > Package Archive File > RedEye.tar.gz```
-4. Once installed, RedEye can be loaded in R using the command ```library(RedEye)``` and uses identical functions as the easyPubMed package.
-5. Open ```Launcher.R```
-7. Replace ```'/Input/path/here'``` with the pathway to your folder containing your OVID files or PMID list(s) (PMID lists must be in CSV format)
-8. Replace ```'Output pathway'``` with your desired output directory. If the specified file does not exist, RedEye will make a new file with that name at the target location
-9. If you are working with a direct OVID output, replace ```SYKO <- FALSE ``` with ```SYKO <- TRUE```. Otherwise, retain as ```FALSE```
-12. Run the script (Ctrl + Shift + Enter)
-
 # Technical notes
 ## Pipeline 
 ![](https://github.com/Inebriateduck/RedEye_Pipeline/blob/main/Stable%20Release/V1.2/RedEye_V1.2.flowchart.png)
