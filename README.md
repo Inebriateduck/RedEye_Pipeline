@@ -11,7 +11,7 @@ Fry, D., Al-Khafaji, W. RedEye Pipeline [Software]. (V1.0). Toronto: Daniel Fry 
 
 # Technical notes
 ## Pipeline 
-![](https://github.com/Inebriateduck/RedEye_Pipeline/blob/main/Stable%20Release/V1.2/RedEye_V1.2.flowchart.png)
+![](RedEye_schematic.svg)
 
 ## Pipeline Components
 ### SYKO
