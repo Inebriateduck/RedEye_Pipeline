@@ -6,7 +6,7 @@ RedEye is a metadata scraping pipeline for use in cross sectional surveys, and i
 #### Please cite this repository if you use the software within
 ```
 Fry, D., Al-Khafaji, W. RedEye Pipeline [Software]. (V1.0). Toronto: Daniel Fry (2025). [Accession date] Retrieved from https://github.com/Inebriateduck/RedEye_Pipeline
-10.5281/zenodo.16996503
+https://doi.org/10.5281/zenodo.16996503
 ```
 
 # Technical notes
