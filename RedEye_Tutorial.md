@@ -1,4 +1,4 @@
-## This tutorial will teach you how to the different accepted data types and run RedEye
+## This tutorial will teach you how to run RedEye on different input data types
 
 ### Pre-requisites
 
@@ -30,8 +30,9 @@ RedEye accepts both manually compiled lists of PMIDs and direct output files fro
 8. Open ```Launcher.R```
 9. Replace ```'/Input/path/here'``` with the pathway to ```OVID_Test_Input```
 10. Replace ```'Output pathway'``` with your desired output directory. If it does not exist, RedEye will make it. This will be where all your data is dumped.
-11. Run the launcher script (Ctrl + Shift + Enter)
-12. Once the script finishes, your final list of metadata will be stored as follows:
+11. Set the line ```SYKO <- FALSE``` to ```SYKO <- TRUE```
+12. Run the launcher script (Ctrl + Shift + Enter)
+13. Once the script finishes, your final list of metadata will be stored as follows:
   ```
 ├───Final_Output
 |             └─── PMID_Data_ULTRA_Output_2026-05-19_23-25-06_validated
@@ -41,4 +42,5 @@ RedEye accepts both manually compiled lists of PMIDs and direct output files fro
     └───ULTRA
   ```
 13. The file stored under Final_Ouput is your validated and cleaned output. Interim files will be stored under the remaining subdirectories.
+14. If you would like to run raw lists of PMIDs (ie, from manual extractions), simply leave the value of ```SYKO``` as ```FALSE``` 
 
